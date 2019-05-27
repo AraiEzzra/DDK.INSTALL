@@ -1,0 +1,57 @@
+version: "1"
+services:
+
+  ddk:
+    image: ddkoin/core:stable
+    container_name: ddknode-core-1
+    networks:
+      ddk-testnet:
+        ipv4_address: 10.6.0.5
+
+    env_file:
+      - ddkcoin.env
+    environment:
+      - SERVICE=CORE
+    ports:
+      - "7007:7007"
+      - "8080:8080"
+    restart: always
+
+  api:
+    depends_on:
+      - ddk
+    image: ddkoin/core:stable
+    container_name: ddknode-api-1
+    networks:
+      ddk-testnet:
+        ipv4_address: 10.6.0.6
+    env_file:
+      - ddkcoin.env
+    environment:
+      - SERVICE=API
+    ports:
+      - "7008:7008"
+    restart: always
+
+  db:
+    image: postgres:9.6-alpine
+    container_name: ddknode-db-1
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      ddk-testnet:
+        ipv4_address: 10.6.0.4
+
+    environment:
+      - POSTGRES_USER=lisk
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=ddk
+    restart: always
+
+networks:
+  ddk-testnet:
+    external:
+      name: docker_ddk-testnet
+
+volumes:
+   db-data:
