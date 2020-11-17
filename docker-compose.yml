@@ -2,7 +2,7 @@ version: "2"
 services:
 
   ddk:
-    image: ddkoin/core:stable
+    image: ddkoin/core:1.5.0
     container_name: ddknode-core-1
     networks:
       ddk-testnet:
@@ -20,7 +20,7 @@ services:
   api:
     depends_on:
       - ddk
-    image: ddkoin/core:stable
+    image: ddkoin/core:1.5.0
     container_name: ddknode-api-1
     networks:
       ddk-testnet:
